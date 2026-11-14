@@ -1,1 +1,9 @@
+[project]
+name = "depviz"
+version = "0.1.0"
+requires-python = ">=3.9"
+description = "Dependency graph visualizer for pip packages"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
