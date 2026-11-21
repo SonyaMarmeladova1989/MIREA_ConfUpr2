@@ -1,1 +1,1 @@
-"""Depviz: dependency graph vizualizerfor pip packages."""
+"""Depviz: dependency graph visualizer for pip packages."""
