@@ -4,7 +4,6 @@ from src import constants
 from src.fetcher import fetch_direct_dependencies
 from src.test_repo import parse_test_repository
 
-
 def _load_repository(config):
     """Return an in-memory dependency map for test mode."""
     if config.mode == constants.MODE_TEST:
