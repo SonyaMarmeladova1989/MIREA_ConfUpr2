@@ -4,7 +4,6 @@ import argparse
 
 from src import constants
 
-
 def build_parser():
     """Construct the CLI argument parser."""
     parser = argparse.ArgumentParser(
