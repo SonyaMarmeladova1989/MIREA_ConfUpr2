@@ -74,8 +74,15 @@ def build_config(args):
             url = urlsplit(repo_url)
         except ValueError as exc:
             raise ConfigError("Invalid repository URL.") from exc
-        if url.scheme not in ("http", "https") or not url.netloc or url.query or url.fragment:
-            raise ConfigError("Repository URL must be an HTTP(S) JSON API base URL.")
+        if (
+            url.scheme not in ("http", "https")
+            or not url.netloc
+            or url.query
+            or url.fragment
+        ):
+            raise ConfigError(
+                "Repository URL must be an HTTP(S) JSON API base URL."
+            )
     return Config(
         package=package,
         repo_url=repo_url,

@@ -28,7 +28,11 @@ def test_extract_requirement_name_with_marker():
     assert _extract_requirement_name(sample) == "requests"
 
 
-@pytest.mark.parametrize("requirement", [" requests>=2", "requests\t>=2", "requests@https://example.org/pkg.whl"])
+@pytest.mark.parametrize("requirement", [
+    " requests>=2",
+    "requests\t>=2",
+    "requests@https://example.org/pkg.whl",
+])
 def test_extract_requirement_name_whitespace_and_direct_urls(requirement):
     assert _extract_requirement_name(requirement) == "requests"
 
@@ -42,15 +46,24 @@ def test_fetch_uses_configured_repository(monkeypatch, base, expected):
 
     def get_json(url):
         urls.append(url)
-        return {"info": {"requires_dist": ["urllib3>=1", "urllib3<3", "certifi"]}}
+        return {
+            "info": {
+                "requires_dist": ["urllib3>=1", "urllib3<3", "certifi"],
+            },
+        }
 
     monkeypatch.setattr("src.fetcher._http_get_json", get_json)
     assert fetch_direct_dependencies("requests", base) == ["urllib3", "certifi"]
     assert urls == [expected]
 
 
-@pytest.mark.parametrize("metadata", [[], {}, {"info": []}, {"info": {"requires_dist": "requests"}},
-                                       {"info": {"requires_dist": [42]}}])
+@pytest.mark.parametrize("metadata", [
+    [],
+    {},
+    {"info": []},
+    {"info": {"requires_dist": "requests"}},
+    {"info": {"requires_dist": [42]}},
+])
 def test_invalid_metadata_is_a_fetch_error(monkeypatch, metadata):
     monkeypatch.setattr("src.fetcher._http_get_json", lambda url: metadata)
     with pytest.raises(FetchError, match="metadata"):

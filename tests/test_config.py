@@ -13,7 +13,7 @@ from src.config import (
 from src.errors import ConfigError
 
 
-class _Args:
+class Args:
     """Minimal stand-in for parsed CLI arguments."""
 
     def __init__(self, **kwargs):
@@ -31,7 +31,7 @@ def _args(**overrides):
         "mermaid": False,
     }
     defaults.update(overrides)
-    return _Args(**defaults)
+    return Args(**defaults)
 
 
 def test_validate_package_rejects_empty():
@@ -67,7 +67,12 @@ def test_build_config_requires_existing_test_file(tmp_path):
         build_config(_args(repo_url=str(missing)))
 
 
-@pytest.mark.parametrize("url", ["file:///etc/passwd", "not-a-url", "https://[", "https://example.org?query=1"])
+@pytest.mark.parametrize("url", [
+    "file:///etc/passwd",
+    "not-a-url",
+    "https://[",
+    "https://example.org?query=1",
+])
 def test_real_repository_must_be_an_http_api_url(url):
     with pytest.raises(ConfigError):
         build_config(_args(mode=constants.MODE_REAL, repo_url=url))

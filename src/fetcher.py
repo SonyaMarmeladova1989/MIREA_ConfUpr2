@@ -34,6 +34,19 @@ def _extract_requirement_name(requirement):
     return requirement.strip()
 
 
+def _get_requirements(data, url):
+    """Validate PyPI metadata and return its requirement strings."""
+    if not isinstance(data, dict) or not isinstance(data.get("info"), dict):
+        raise FetchError(f"Invalid package metadata from {url}")
+    info = data["info"]
+    requires = info.get("requires_dist") or []
+    if not isinstance(requires, list) or any(
+        not isinstance(item, str) for item in requires
+    ):
+        raise FetchError(f"Invalid requirements metadata from {url}")
+    return requires
+
+
 def fetch_direct_dependencies(package, repo_url=constants.DEFAULT_REPO_URL):
     """Return the list of direct dependency names for a package."""
     base_url = repo_url.rstrip("/")
@@ -42,17 +55,10 @@ def fetch_direct_dependencies(package, repo_url=constants.DEFAULT_REPO_URL):
     url = constants.PYPI_JSON_URL.format(
         repo_url=base_url, package=urllib.parse.quote(package, safe="")
     )
-    data = _http_get_json(url)
-    if not isinstance(data, dict) or not isinstance(data.get("info"), dict):
-        raise FetchError(f"Invalid package metadata from {url}")
-    info = data["info"]
-    requires = info.get("requires_dist") or []
-    if not isinstance(requires, list) or any(not isinstance(item, str) for item in requires):
-        raise FetchError(f"Invalid requirements metadata from {url}")
+    requires = _get_requirements(_http_get_json(url), url)
     names = []
     for requirement in requires:
         name = _extract_requirement_name(requirement)
         if name and name not in names:
             names.append(name)
     return names
-

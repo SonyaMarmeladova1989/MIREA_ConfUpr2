@@ -18,4 +18,3 @@ ASCII_BRANCH = "├── "
 ASCII_LAST = "└── "
 ASCII_INDENT_WIDTH = 4
 MERMAID_INDENT = "    "
-

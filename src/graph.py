@@ -11,7 +11,9 @@ def _load_repository(config):
     if config.mode == constants.MODE_TEST:
         repository = parse_test_repository(config.repo_url)
         if config.package not in repository:
-            raise GraphError(f"Package not found in test repository: {config.package}")
+            raise GraphError(
+                f"Package not found in test repository: {config.package}"
+            )
         return repository
     return None
 
@@ -37,7 +39,9 @@ def build_graph(config):
         if depth >= config.max_depth:
             return node_tree
         if node not in dependencies:
-            dependencies[node] = _dependencies_of(node, repository, config.repo_url)
+            dependencies[node] = _dependencies_of(
+                node, repository, config.repo_url
+            )
         visiting.add(node)
         node_tree["children"] = [
             visit(child, depth + constants.DEPTH_STEP)
@@ -73,11 +77,13 @@ def _build_forward_map(config, repository):
 def build_reverse_graph(config):
     """Return reverse dependencies (who depends on the package)."""
     repository = _load_repository(config)
-    forward = repository if repository is not None else _build_forward_map(config, repository)
+    forward = (
+        repository if repository is not None
+        else _build_forward_map(config, repository)
+    )
     reverse = {config.package: []}
     for source, targets in forward.items():
         reverse.setdefault(source, [])
         for target in targets:
             reverse.setdefault(target, []).append(source)
     return reverse
-
