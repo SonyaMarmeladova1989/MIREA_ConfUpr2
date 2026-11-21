@@ -7,7 +7,7 @@ test:
 	python -m pytest tests -v
 
 lint:
-	python -m py_compile src/*.py
+	python -m compileall -q src tests
 
 run:
 	python -m src.main --package $(PKG) --repo-url $(URL) \

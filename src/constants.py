@@ -6,7 +6,8 @@ MAX_DEPTH = 100
 INITIAL_DEPTH = 0
 DEPTH_STEP = 1
 
-PYPI_JSON_URL = "https://pypi.org/pypi/{package}/json"
+DEFAULT_REPO_URL = "https://pypi.org/pypi"
+PYPI_JSON_URL = "{repo_url}/{package}/json"
 HTTP_TIMEOUT_SECONDS = 10
 
 MODE_REAL = "real"
@@ -16,5 +17,5 @@ VALID_MODES = (MODE_REAL, MODE_TEST)
 ASCII_BRANCH = "├── "
 ASCII_LAST = "└── "
 ASCII_INDENT_WIDTH = 4
-MERMAID_INDENT = "    "
+MERMAID_INDENT = "    "
 
